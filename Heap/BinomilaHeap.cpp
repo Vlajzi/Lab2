@@ -59,6 +59,7 @@ void BinomialHeap::AddElement(short el)
 	HeapElement* tmp = new HeapElement(el, nullptr);
 	tmp->next = head;
 	head = tmp;
+	count++;
 	if (minitem == nullptr)
 	{
 		minitem = head;
@@ -208,7 +209,7 @@ short BinomialHeap::ExtractMin()
 	minitem->~HeapElement();
 
 	Normalize();
-
+	count--;
 	return value;
 }
 
@@ -266,6 +267,8 @@ void BinomialHeap::Deleate(HeapElement * nod)
 	ExtractMin();
 }
 
+
+//proveri
 HeapElement * BinomialHeap::FindNode(int pozition)
 {
 	HeapElement* rez = nullptr;
@@ -277,29 +280,40 @@ HeapElement * BinomialHeap::FindNode(int pozition)
 
 	rez = head;
 
-	while (pozition != 0)
+	while (pozition > 0)
 	{
 		
 		int val = pow(2, rez->degree);
-		if (val  < pozition)
+		if (val  <= pozition)
 		{
 			pozition -= val;
 			rez = rez->next;
 		}
 		else
 		{
-			int i = rez->children.capacity();
-			while (true)
+			int i = rez->children.capacity()-1;
+			while (i >= 0 && pozition > 0)
 			{
-				i--;
+			
 				val = pow(2,rez->children[i]->degree);
 				if (val < pozition)
 				{
 					pozition -= val;
+					i--;
 				}
 				else
 				{
 					rez = rez->children[i];
+					if (1 == pozition )
+					{
+						pozition = -1;
+						
+					}
+					else
+					{
+						pozition--;
+						i = rez->children.capacity() - 1;
+					}
 				}
 			}
 		}
