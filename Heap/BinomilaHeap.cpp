@@ -21,7 +21,7 @@ void BinomialHeap::Normalize()
 	}
 
 	bool mach = false;
-	while (poziton->next!= nullptr)//check
+	while (poziton != nullptr && poziton->next != nullptr)//check
 	{ 
 		
 		
@@ -52,6 +52,8 @@ void BinomialHeap::Normalize()
 		}
 						
 	}
+
+	this->FindMin();
 }
 
 void BinomialHeap::AddElement(short el)
@@ -118,43 +120,63 @@ void BinomialHeap::Mearge(BinomialHeap& a)
 {
 
 	HeapElement* last = a.head;
-
+	
+	bool test = true;
 	if (last == nullptr)
 	{
 		return;
 	}
+	HeapElement* elem = head;
+	HeapElement** pozition = &head;
 	do
 	{
-		HeapElement* elem = head;
+		
 		//last->parent = nullptr;//test
 		if (head == nullptr)
 		{
 			head = last;
-
+			minitem = a.minitem;
+			break;
 		}
 		else
 		{
 			bool ind = true;
 			while (ind)
 			{
-				if (elem->next == nullptr)
+				if (elem->degree > last->degree)
 				{
-					elem->next = last;
-					ind = false;
-				}
-				else if (elem->next->degree >= last->degree)
-				{
-					HeapElement* tmp = last;
+					*pozition = last;
+					HeapElement* help = last;
 					last = last->next;
-					tmp->next = elem->next;
-					elem->next = tmp;
+					help->next = elem;
+					pozition = &help->next;
 					ind = false;
 				}
-				elem = elem->next;
+				else
+				{
+					if (elem->next == nullptr)
+					{
+						elem->next = last;
+						last = last->next;
+						if(last != nullptr)
+						last->next = nullptr;
+						ind = false;
+					}
+					else if (elem->next->degree >= last->degree)
+					{
+						HeapElement* tmp = last;
+						last = last->next;
+						tmp->next = elem->next;
+						elem->next = tmp;
+						ind = false;
+					}
+					elem = elem->next;
+				}
+				
 			}
 		}
 
-		last = last->next;
+		//last = last->next;
 
 	} while (last != nullptr);
 	
@@ -190,11 +212,14 @@ short BinomialHeap::ExtractMin()
 		BinomialHeap* tmp = new BinomialHeap();
 		tmp->head = minitem->children[0];
 		HeapElement* point = tmp->head;
+		point->parent = nullptr;
 		for (int i = 1; i < minitem->degree; i++)
 		{
 			point->next = minitem->children[i];
+			point = point->next;
+			point->parent = nullptr;
 		}
-
+		tmp->FindMin();
 		Mearge(*tmp);
 	}
 	
@@ -207,7 +232,7 @@ short BinomialHeap::ExtractMin()
 	short value = minitem->key;
 
 	minitem->~HeapElement();
-
+	minitem = nullptr;
 	Normalize();
 	count--;
 	return value;
@@ -223,6 +248,10 @@ void BinomialHeap::FindMin()
 {
 	if (head == nullptr)
 		return;
+	if (minitem == nullptr)
+	{
+		minitem = head;
+	}
 	HeapElement* pom = this->head;
 	while (pom != nullptr)
 	{
@@ -330,18 +359,22 @@ void Print( HeapElement* node )
 	HeapElement* tmp = node;
 	while (tmp != nullptr)
 	{
-	 	cout << tmp->key << "\t";
+	 	cout << tmp->key;
 
 		HeapElement* pom;
 
-		for (int i = 0; i < tmp->children.size(); i++)
+		for (int i = tmp->degree - 1; i >= 0; i--)
 		{
-			
+			cout << "----------";
 			Print(tmp->children[i]);
+			if(i != tmp->degree - 1)
+				cout << endl;
+			if(i != 0)
+			cout << "\t|";
 		}
 
 		tmp = tmp->next;
-		cout << endl;
+		cout << endl<<endl;
 	}
 }
 
