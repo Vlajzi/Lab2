@@ -217,6 +217,100 @@ void BinomialHeap::Printf()
 	Print(this->head);
 }
 
+
+void BinomialHeap::FindMin()
+{
+	if (head == nullptr)
+		return;
+	HeapElement* pom = this->head;
+	while (pom != nullptr)
+	{
+		if (minitem->key > pom->key)
+		{
+			minitem = pom;
+		}
+		pom = pom->next;
+	}
+}
+
+
+void BinomialHeap::DecreseKey(HeapElement * nod, short val)
+{
+	HeapElement* tmp = nod;
+	tmp->key = val;
+	bool out = true;
+	while (tmp->parent != nullptr && out)
+	{
+		if (val <= tmp->parent->key)
+		{
+			short m = tmp->parent->key;
+			tmp->parent->key = val;
+			tmp->key = m;
+			tmp = tmp->parent;
+		}
+		else
+		{
+			out = false;
+		}
+	}
+	if (!out)
+	{
+		FindMin();
+	}
+
+}
+
+void BinomialHeap::Deleate(HeapElement * nod)
+{
+	DecreseKey(nod, minitem->key - 1);
+	ExtractMin();
+}
+
+HeapElement * BinomialHeap::FindNode(int pozition)
+{
+	HeapElement* rez = nullptr;
+
+	if (pozition >= count)
+	{
+		throw exception("Out of range");
+	}
+
+	rez = head;
+
+	while (pozition != 0)
+	{
+		
+		int val = pow(2, rez->degree);
+		if (val  < pozition)
+		{
+			pozition -= val;
+			rez = rez->next;
+		}
+		else
+		{
+			int i = rez->children.capacity();
+			while (true)
+			{
+				i--;
+				val = pow(2,rez->children[i]->degree);
+				if (val < pozition)
+				{
+					pozition -= val;
+				}
+				else
+				{
+					rez = rez->children[i];
+				}
+			}
+		}
+	}
+
+	return rez;
+}
+
+
+//Los print
+
 void Print( HeapElement* node )
 {
 	HeapElement* tmp = node;
@@ -236,3 +330,6 @@ void Print( HeapElement* node )
 		cout << endl;
 	}
 }
+
+
+
