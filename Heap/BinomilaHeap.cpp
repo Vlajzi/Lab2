@@ -81,7 +81,7 @@ void BinomialHeap::Normalize()
 		{
 			
 
-			if (poziton != head)
+			if (poziton != curent)
 			{
 				curent = curent->next;
 			}
@@ -218,21 +218,22 @@ void BinomialHeap::Mearge(BinomialHeap& a)
 
 	} while (last != nullptr);
 	
-	count += a.count;
+	count += a.count;//ne treba
 
-	if (minitem == nullptr || minitem->key >= a.minitem->key)
+	/*if (minitem == nullptr || minitem->key >= a.minitem->key)
 	{
-		minitem = a.minitem;
-	}
-
+		
+	}*/
+	minitem = a.minitem;
 	Normalize();
 
 }
 
 short BinomialHeap::ExtractMin()
 {
-
+	
 	HeapElement* help = head;
+	HeapElement* tmpMin = minitem;
 
 	if (head == minitem)
 	{
@@ -246,6 +247,10 @@ short BinomialHeap::ExtractMin()
 			help = help->next;
 		}
 		
+		//bilo
+	}
+	if (minitem->degree != 0)
+	{
 		help->next = minitem->next;
 		BinomialHeap* tmp = new BinomialHeap();
 		tmp->head = minitem->children[0];
@@ -262,15 +267,14 @@ short BinomialHeap::ExtractMin()
 	}
 	
 	
-	
 
 	//help = head;
 	//cahnge to merge
 
-	short value = minitem->key;
+	short value = tmpMin->key;
 
-	minitem->~HeapElement();
-	minitem = nullptr;
+	tmpMin->~HeapElement();
+	tmpMin = nullptr;
 	Normalize();
 	count--;
 	return value;
@@ -293,7 +297,7 @@ void BinomialHeap::FindMin()
 	HeapElement* pom = this->head;
 	while (pom != nullptr)
 	{
-		if (minitem->key > pom->key)
+		if (minitem->key >= pom->key)
 		{
 			minitem = pom;
 		}
@@ -313,7 +317,7 @@ void BinomialHeap::DecreseKey(HeapElement * nod, short val)
 		{
 			short m = tmp->parent->key;
 			tmp->parent->key = val;
-			tmp->key = m;
+			tmp->key = m;		
 			tmp = tmp->parent;
 		}
 		else
@@ -321,7 +325,7 @@ void BinomialHeap::DecreseKey(HeapElement * nod, short val)
 			out = false;
 		}
 	}
-	if (!out)
+	if (out)
 	{
 		FindMin();
 	}
@@ -358,7 +362,7 @@ HeapElement * BinomialHeap::FindNode(int pozition)
 		}
 		else
 		{
-			int i = rez->children.capacity()-1;
+			int i = rez->degree-1;
 			while (i >= 0 && pozition > 0)
 			{
 			
@@ -379,7 +383,7 @@ HeapElement * BinomialHeap::FindNode(int pozition)
 					else
 					{
 						pozition--;
-						i = rez->children.capacity() - 1;
+						i = rez->degree - 1;
 					}
 				}
 			}

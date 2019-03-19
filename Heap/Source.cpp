@@ -10,9 +10,9 @@ int main(int argc, char* argv[])
 	srand(10);
 	/*BinomialHeap test = BinomialHeap();
 	
-	short a[] = { 100,80,85,70,50,65,40,20,30,25,50,10,12 };
+	short a[] = { 100,80,85,70,50,65,40,20,30,25,50,10,12,45,105};
 
-	for (int i = 0; i < 13; i++)
+	for (int i = 0; i < 15; i++)
 	{
 		test.AddElement(a[i]);
 	}
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	test.Printf();
 	cin.ignore();
 	cout << endl << "---New---" << endl;
-	test.DecreseKey(test.FindNode(8), 11);
+	test.DecreseKey(test.FindNode(8), 9);
 	test.Printf();
 	cin.ignore();
 	test.ExtractMin();
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	cin.ignore();*/
 	
 	int des = 10;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		BinomialHeap* heap = new BinomialHeap();
 		FillHeap(heap, des);
@@ -61,7 +61,9 @@ void TestHeap(BinomialHeap* heap,int count)
 	cout << "Minimumi su: ";
 	for (int i = 0; i < size; i++)
 	{
-		cout << " " << heap->ExtractMin();
+		//cout << " " << heap->ExtractMin();
+
+		heap->ExtractMin();
 	}
 	cout << endl;
 
