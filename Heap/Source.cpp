@@ -8,7 +8,7 @@ void TestHeap(BinomialHeap* heap, int count);
 int main(int argc, char* argv[])
 {
 	srand(10);
-	BinomialHeap test = BinomialHeap();
+	/*BinomialHeap test = BinomialHeap();
 	
 	short a[] = { 100,80,85,70,50,65,40,20,30,25,50,10,12 };
 
@@ -32,16 +32,17 @@ int main(int argc, char* argv[])
 	cout << endl << "---New---" << endl;
 	test.ExtractMin();
 	test.Printf();
-	cin.ignore();
-
-	/*BinomialHeap* heap = new BinomialHeap();
+	cin.ignore();*/
+	
 	int des = 10;
-	for (int i = 1; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		FillHeap(heap, i * des);
-		TestHeap(heap,i * des);
+		BinomialHeap* heap = new BinomialHeap();
+		FillHeap(heap, des);
+		TestHeap(heap, des);
+		des *= 10;
 	}
-	*/
+	
 }
 
 void FillHeap(BinomialHeap* heap,int count)

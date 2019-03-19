@@ -15,6 +15,10 @@ void BinomialHeap::Normalize()
 {
 	HeapElement* curent = head;
 	HeapElement* poziton = curent;
+
+	HeapElement* mh1 = curent;
+	HeapElement* mh2 = poziton;
+
 	if (curent == nullptr || curent->next == nullptr)
 	{
 		return;
@@ -25,9 +29,12 @@ void BinomialHeap::Normalize()
 	{ 
 		
 		
-		if (poziton->next->degree == poziton->degree)
+		if (poziton->next->degree == poziton->degree )// ako ima vise
 		{ 
-			HeapElement* tmp = poziton->next->next;
+			mach = true;
+			mh1 = curent;
+			mh2 = poziton;
+			/*HeapElement* tmp = poziton->next->next;
 			if (poziton == head)
 			{
 				head = Consoladate(poziton->next, poziton);
@@ -39,16 +46,47 @@ void BinomialHeap::Normalize()
 				curent->next = Consoladate(poziton->next, poziton);
 				curent->next->next = tmp;
 			}
-			poziton = curent;
+			poziton = curent;*/
+			if (poziton->next->next == nullptr || poziton->next->next->degree != poziton->degree)
+			{
+				mach = false;
+				HeapElement* tmp = mh2->next->next;
+				if (mh2 == head)
+				{
+					head = Consoladate(mh2->next, mh2);
+					head->next = tmp;
+					mh1 = head;
+				}
+				else
+				{
+					mh1->next = Consoladate(mh2->next, mh2);
+					mh1->next->next = tmp;
+				}
+				poziton = mh1;
+				curent = mh1;
+
+
+			}
+			else
+			{
+				if (poziton != head)
+				{
+					curent = curent->next;
+				}
+				poziton = poziton->next;
+			}
 			
 		}
 		else
 		{
+			
+
 			if (poziton != head)
 			{
 				curent = curent->next;
 			}
-			poziton = curent->next;
+			poziton = poziton->next;
+			
 		}
 						
 	}
@@ -159,7 +197,7 @@ void BinomialHeap::Mearge(BinomialHeap& a)
 						elem->next = last;
 						last = last->next;
 						if(last != nullptr)
-						last->next = nullptr;
+						last = nullptr;
 						ind = false;
 					}
 					else if (elem->next->degree >= last->degree)
@@ -220,7 +258,7 @@ short BinomialHeap::ExtractMin()
 			point->parent = nullptr;
 		}
 		tmp->FindMin();
-		Mearge(*tmp);
+		Mearge(*tmp);//823 pogresno vezuje i gore i dete
 	}
 	
 	
