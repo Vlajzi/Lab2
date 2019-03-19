@@ -1,6 +1,6 @@
 #include "BinomilaHeap.h"
 #include "HeapElement.h"
-
+#include <ctime>
 void FillHeap(BinomialHeap* heap, int count);
 void TestHeap(BinomialHeap* heap, int count);
 
@@ -39,8 +39,10 @@ int main(int argc, char* argv[])
 	{
 		BinomialHeap* heap = new BinomialHeap();
 		FillHeap(heap, des);
+		cout << "Za " << des << " elemenata" << endl;
 		TestHeap(heap, des);
 		des *= 10;
+		cout << endl;
 	}
 	
 }
@@ -59,18 +61,22 @@ void TestHeap(BinomialHeap* heap,int count)
 	int size = count / 10;
 	count = count - size;
 	cout << "Minimumi su: ";
+	clock_t begin = clock();
 	for (int i = 0; i < size; i++)
 	{
 		//cout << " " << heap->ExtractMin();
-
+		
 		heap->ExtractMin();
 	}
-	cout << endl;
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout <<"Proslo je :" << elapsed_secs << " sekundi za ExtractMin" <<endl;
 
 
 	//size = count / 10;
 	HeapElement** test = (HeapElement**)malloc(size * sizeof(BinomialHeap*));
 	int ind = 0;
+	begin = clock();
 	for (int i = 0; i < size; i++)
 	{
 		ind = rand() % count;
@@ -81,16 +87,30 @@ void TestHeap(BinomialHeap* heap,int count)
 
 		test[i] = proba;
 	}
+	end = clock();
+	elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "Proslo je :" << elapsed_secs << " sekundi za Decrease Key" << endl;
 
+
+	begin = clock();
 	for (int i = 0; i < size; i++)
 	{
 		heap->Deleate(test[i]);
 	}
+	end = clock();
+	elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "Proslo je :" << elapsed_secs << " sekundi za Deleate Key" << endl;
 
+
+	begin = clock();
 	for (int i = 0; i < size; i++)
 	{
 		short val = rand() % 10001;
 		heap->AddElement(val);
 	}
+	end = clock();
+	elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "Proslo je :" << elapsed_secs << " sekundi za Add Element" << endl;
+
 }
 
